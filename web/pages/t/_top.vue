@@ -49,6 +49,7 @@ export default {
     ArticleCardBlock,
     InlineErrorBlock,
   },
+
   data() {
     return {
       articles: [],
@@ -58,23 +59,25 @@ export default {
 
   head() {
     return {
-      title: "Home",
+      title: `Top articles in ${this.$route.params.top}`,
     };
   },
 
   async fetch() {
-    await this.getArticles();
+    await this.getArticlesByTop();
   },
 
   methods: {
-    async getArticles() {
+    async getArticlesByTop() {
       const res = await this.$axios.get("/articles", {
         params: {
           state: "rising",
-          tag: "nuxt",
+          tag: "vue",
           page: this.page,
+          top: this.getTop(),
         },
       });
+
       const newArticles = res.data.map((item, i) => {
         if (i === 0) {
           return {
@@ -91,18 +94,28 @@ export default {
       this.articles = this.articles.concat(newArticles);
     },
 
+    getTop() {
+      let top = null;
+      switch (this.$route.params.top) {
+        case "yesterday":
+          top = 1;
+          break;
+        case "week":
+          top = 7;
+          break;
+        default:
+          top = 30;
+          break;
+      }
+      return top;
+    },
+
     lazyLoadArticles(isVisible) {
       if (isVisible) {
         this.page++;
         this.$fetch();
       }
     },
-  },
-
-  activated() {
-    if (this.$fetchState.timestamp <= Date.now() - 60000) {
-      this.$fetch();
-    }
   },
 };
 </script>
