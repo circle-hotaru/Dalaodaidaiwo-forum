@@ -1,9 +1,7 @@
 <template>
   <div class="bg-gray-50">
     <navigation />
-    <div class="pt-8 md:pt-16">
-      <Nuxt class="pt-5 md:pt-4" keep-alive />
-    </div>
+    <Nuxt class="mt-16" keep-alive />
   </div>
 </template>
 
