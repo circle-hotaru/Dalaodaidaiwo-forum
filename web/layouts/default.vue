@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-50">
     <navigation />
-    <Nuxt class="mt-16" keep-alive />
+    <Nuxt class="pt-20" keep-alive />
   </div>
 </template>
 

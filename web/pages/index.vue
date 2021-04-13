@@ -1,5 +1,5 @@
 <template>
-  <div class="md:flex pt-4">
+  <div class="md:flex">
     <div class="hidden md:block w-1/3 lg:w-1/4 px-4">
       <slider-left />
     </div>
