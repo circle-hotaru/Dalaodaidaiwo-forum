@@ -25,13 +25,15 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/vue-placeholders.js',
-    '~/plugins/vue-observe-visibility.client.js'
+    '~/plugins/vue-observe-visibility.client.js',
+    { src: '@/plugins/vue-mavon-editor', ssr: false }
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     '@nuxtjs/svg',
     '@nuxtjs/tailwindcss',
+    'nuxt-buefy',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

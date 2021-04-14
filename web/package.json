@@ -11,8 +11,10 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
     "core-js": "^3.9.1",
+    "mavon-editor": "^2.9.1",
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
+    "nuxt-buefy": "^0.4.6",
     "vue-content-placeholders": "^0.2.1",
     "vue-observe-visibility": "^1.0.0"
   },

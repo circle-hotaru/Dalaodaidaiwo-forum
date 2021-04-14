@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-50">
-    <navigation />
+    <navigation class="z-50" />
     <Nuxt class="pt-20" keep-alive />
   </div>
 </template>
