@@ -30,7 +30,7 @@
       <!-- 登录/注册 || actions -->
       <div class="w-auto ml-auto">
         <!-- 未登录 -->
-        <div v-if="!havelogin" class="flex items-center space-x-4 h-full">
+        <div v-if="!haslogin" class="flex items-center space-x-4 h-full">
           <nuxt-link :to="{ name: 'login' }">
             <button
               class="px-4 py-2 rounded-md bg-white hover:bg-gray-100 text-blue-700 focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
@@ -38,7 +38,7 @@
               登录
             </button>
           </nuxt-link>
-          <nuxt-link :to="{ name: 'signup' }">
+          <nuxt-link :to="{ name: 'register' }">
             <button
               class="px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
             >
@@ -48,17 +48,12 @@
         </div>
 
         <!-- 已登录 -->
-        <div v-if="havelogin" class="flex items-center space-x-4 h-full">
+        <div v-if="haslogin" class="flex items-center space-x-4 h-full">
           <button
+            @click="$router.push('/article-edit')"
             class="px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
           >
             写文章
-          </button>
-          <button class="focus:outline-none rounded-full p-1 focus:bg-gray-200">
-            <img
-              src="https://s.svgbox.net/hero-outline.svg?ic=chat&fill=grey-700"
-              class="h-6 w-6"
-            />
           </button>
           <button class="focus:outline-none rounded-full p-1 focus:bg-gray-200">
             <img
@@ -80,10 +75,10 @@ export default {
   components: {
     Profile,
   },
-  data() {
-    return {
-      havelogin: false,
-    };
+  computed: {
+    haslogin() {
+      return this.$store.state.hasLogin;
+    },
   },
 };
 </script>

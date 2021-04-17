@@ -7,7 +7,7 @@
     <button
       class="rounded-full overflow-hidden focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
     >
-      <img src="https://fayazz.co/fayaz.jpg" class="h-8 w-8" alt="Profile" />
+      <img :src="userInfo.avatar" class="h-8 w-8" alt="Profile" />
     </button>
     <transition
       enter-active-class="transition-all ease-out duration-100"
@@ -22,17 +22,18 @@
         class="bg-white w-56 rounded-md border-2 border-gray-900 absolute top-12 right-0 mt-2 super-shadow overflow-hidden origin-top-right"
       >
         <div class="p-2 border-b">
-          <p>Fayaz Ahmed</p>
-          <p class="text-sm text-gray-500">@fayaz</p>
+          <p>{{ userInfo.username }}</p>
+          <p class="text-sm text-gray-500">@{{ userInfo.username }}</p>
         </div>
         <ul class="border-b p-2">
-          <li class="py-2 pl-1 rounded hover:bg-gray-100">Dashboard</li>
-          <li class="py-2 pl-1 rounded hover:bg-gray-100">Write a post</li>
-          <li class="py-2 pl-1 rounded hover:bg-gray-100">Reading list</li>
-          <li class="py-2 pl-1 rounded hover:bg-gray-100">Settings</li>
+          <li class="py-2 pl-1 rounded hover:bg-gray-100">个人主页</li>
+          <li class="py-2 pl-1 rounded hover:bg-gray-100">写文章</li>
+          <li class="py-2 pl-1 rounded hover:bg-gray-100">设置</li>
         </ul>
         <div class="p-2">
-          <p class="py-2 pl-1">Sign Out</p>
+          <p @click="logout" class="py-2 pl-1 rounded hover:bg-gray-100">
+            登出
+          </p>
         </div>
       </div>
     </transition>
@@ -45,6 +46,19 @@ export default {
     return {
       show: false,
     };
+  },
+  computed: {
+    // 用户头像
+    userInfo() {
+      return this.$store.state.userInfo;
+    },
+  },
+  methods: {
+    // 退出登录
+    logout() {
+      this.$store.commit("logout");
+      this.$router.push("/");
+    },
   },
 };
 </script>

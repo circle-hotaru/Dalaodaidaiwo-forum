@@ -26,7 +26,8 @@ export default {
   plugins: [
     '~/plugins/vue-placeholders.js',
     '~/plugins/vue-observe-visibility.client.js',
-    { src: '@/plugins/vue-mavon-editor', ssr: false }
+    { src: '~/plugins/axios.js', ssr: false },
+    { src: '~/plugins/vue-mavon-editor', ssr: false }
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -44,7 +45,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://dev.to/api',
+    baseURL: 'http://localhost:3009/api/web',
     timeout: 20000
   },
 
