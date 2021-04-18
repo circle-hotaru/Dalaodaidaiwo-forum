@@ -60,28 +60,6 @@
         </b-taginput>
       </section>
 
-      <div class="mt-2">
-        <label class="inline-flex items-center">
-          <input
-            type="radio"
-            v-model="article.isOrigin"
-            class="form-radio"
-            name="articleType"
-            value="original"
-          />
-          <span class="ml-2">原创</span>
-        </label>
-        <label class="inline-flex items-center ml-6">
-          <input
-            type="radio"
-            v-model="article.isOrigin"
-            class="form-radio"
-            name="articleType"
-            value="reprint"
-          />
-          <span class="ml-2">转载</span>
-        </label>
-      </div>
       <no-ssr>
         <mavon-editor
           ref="md"
@@ -98,7 +76,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   layout: "edit",
 
@@ -147,7 +124,6 @@ export default {
         // 文章数据
         title: "",
         tags: [],
-        isOrigin: true,
         content_md: "",
         content_html: "",
       },
@@ -183,11 +159,11 @@ export default {
 
     // 新增或更新文章
     async save() {
-      const { title, content_md, content_html, isOrigin } = this.article;
+      const { title, content_md, content_html } = this.article;
       let { tags } = this.article;
       tags = tags.map((item) => item._id);
       // 发送的数据对象
-      const data = { title, tags, content_md, content_html, isOrigin };
+      const data = { title, tags, content_md, content_html };
       // 新增或更新文章
       const res = await this.$axios.post("/article", data);
       // 操作成功
@@ -200,15 +176,8 @@ export default {
     async imgAdd(pos, file) {
       const formdata = new FormData();
       formdata.append("file", file);
-      const token = localStorage.getItem("access_token");
-      const res = await axios({
-        url: "http://localhost:3009/api/web" + this.url,
-        method: "post",
-        data: formdata,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + token,
-        },
+      const res = await this.$axios.post("/upload/images/article", formdata, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       // 设置图片到md编辑器
       this.$refs.md.$img2Url(pos, res.data.data.url);
