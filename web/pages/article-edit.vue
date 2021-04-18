@@ -26,6 +26,7 @@
         <div class="text-2xl text-gray-600 w-auto">{{ pageTitle }}</div>
         <div>
           <button
+            @click="save"
             class="px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-800 text-white focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
           >
             {{ btnText }}
@@ -38,6 +39,7 @@
       <div class="w-full">
         <input
           type="text"
+          v-model="article.title"
           placeholder="请输入标题"
           class="text-gray-600 placeholder-gray-600 rounded-md p-4 h-10 bg-gray-100 w-full border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
@@ -45,12 +47,12 @@
 
       <section>
         <b-taginput
-          v-model="tags"
+          v-model="article.tags"
           :data="filteredTags"
           autocomplete
-          :allow-new="true"
-          field="tag"
+          field="name"
           icon="label"
+          maxtags="3"
           placeholder="添加标签"
           @typing="getFilteredTags"
           class="z-40"
@@ -62,6 +64,7 @@
         <label class="inline-flex items-center">
           <input
             type="radio"
+            v-model="article.isOrigin"
             class="form-radio"
             name="articleType"
             value="original"
@@ -71,6 +74,7 @@
         <label class="inline-flex items-center ml-6">
           <input
             type="radio"
+            v-model="article.isOrigin"
             class="form-radio"
             name="articleType"
             value="reprint"
@@ -80,8 +84,12 @@
       </div>
       <no-ssr>
         <mavon-editor
+          ref="md"
           :toolbars="markdownOption"
           v-model="content"
+          code-style="atom-one-dark"
+          @imgAdd="imgAdd"
+          @change="change"
           style="z-index: 30 !important"
         />
       </no-ssr>
@@ -90,16 +98,7 @@
 </template>
 
 <script>
-const systemTags = [
-  "vue",
-  "nuxt",
-  "react",
-  "html",
-  "css",
-  "tailwind",
-  "bootstrap",
-];
-
+import axios from "axios";
 export default {
   layout: "edit",
 
@@ -141,17 +140,84 @@ export default {
         preview: true, // 预览
       },
       pageTitle: "写文章",
+      // MD 编辑器内容
       content: "开始编辑",
       btnText: "发布文章",
-      tags: [],
-      filteredTags: systemTags,
+      article: {
+        // 文章数据
+        title: "",
+        tags: [],
+        isOrigin: true,
+        content_md: "",
+        content_html: "",
+      },
+      tagList: [],
+      filteredTags: [],
+      // 图片上传地址
+      url: "/upload/images/article",
     };
   },
+
+  async fetch() {
+    await this.getTagList();
+    this.filteredTags = this.tagList;
+  },
+
   methods: {
+    // 获取标签列表
+    async getTagList() {
+      const res = await this.$axios.get("/tag");
+      if (res.data.code === 0) {
+        this.tagList = res.data.data.tagList;
+      }
+    },
+
+    // 自动过滤标签
     getFilteredTags(text) {
-      this.filteredTags = systemTags.filter((option) => {
-        return option.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
+      this.filteredTags = this.tagList.filter((option) => {
+        return (
+          option.name.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0
+        );
       });
+    },
+
+    // 新增或更新文章
+    async save() {
+      const { title, content_md, content_html, isOrigin } = this.article;
+      let { tags } = this.article;
+      tags = tags.map((item) => item._id);
+      // 发送的数据对象
+      const data = { title, tags, content_md, content_html, isOrigin };
+      // 新增或更新文章
+      const res = await this.$axios.post("/article", data);
+      // 操作成功
+      if (res.code === 0) {
+        this.$router.push("/");
+      }
+    },
+
+    // 上传图片
+    async imgAdd(pos, file) {
+      const formdata = new FormData();
+      formdata.append("file", file);
+      const token = localStorage.getItem("access_token");
+      const res = await axios({
+        url: "http://localhost:3009/api/web" + this.url,
+        method: "post",
+        data: formdata,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + token,
+        },
+      });
+      // 设置图片到md编辑器
+      this.$refs.md.$img2Url(pos, res.data.data.url);
+    },
+
+    // MD 编辑器内容改变
+    change(value, render) {
+      this.article.content_md = value;
+      this.article.content_html = render;
     },
   },
 };

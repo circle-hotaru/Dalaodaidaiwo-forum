@@ -55,9 +55,7 @@ export default {
   methods: {
     async register() {
       let data = this.user;
-      const oriRes = await this.$axios.post("/register", data);
-      console.log(oriRes);
-      const res = oriRes.data;
+      const res = await this.$axios.$post("/register", data);
 
       // 注册成功
       if (res.code === 0) {

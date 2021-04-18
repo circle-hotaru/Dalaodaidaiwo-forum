@@ -49,8 +49,7 @@ export default {
   methods: {
     async login() {
       let data = this.user;
-      const oriRes = await this.$axios.post("/login", data);
-      const res = oriRes.data;
+      const res = await this.$axios.$post("/login", data);
 
       // 登录成功
       if (res.code === 0) {
