@@ -26,7 +26,14 @@
           <p class="text-sm text-gray-500">@{{ userInfo.username }}</p>
         </div>
         <ul class="border-b p-2">
-          <li class="py-2 pl-1 rounded hover:bg-gray-100">个人主页</li>
+          <nuxt-link
+            :to="{
+              name: 'id',
+              params: { id: this.$store.state.userInfo._id },
+            }"
+          >
+            <li class="py-2 pl-1 rounded hover:bg-gray-100">个人主页</li>
+          </nuxt-link>
           <li class="py-2 pl-1 rounded hover:bg-gray-100">写文章</li>
           <li class="py-2 pl-1 rounded hover:bg-gray-100">设置</li>
         </ul>

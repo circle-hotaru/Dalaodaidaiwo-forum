@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <div>
     <template v-if="$fetchState.pending">
       <div class="image-wrapper loading">
         <content-placeholders>
@@ -21,89 +21,89 @@
       <inline-error-block :error="$fetchState.error" />
     </template>
     <template v-else>
-      <div class="image-wrapper">
-        <img :src="user.profile_image" :alt="user.name" />
-      </div>
-      <div class="content">
-        <h1>{{ user.name }}</h1>
-        <a
-          :href="`https://dev.to/${user.username}`"
-          target="_blank"
-          rel="nofollow noopener noreferrer"
-          class="f-button"
+      <div
+        class="w-full sm:w-4/5 max-w-5xl sm:mx-auto flex flex-col sm:flex-row space-y-2 justify-center items-center sm:justify-between bg-white p-4 sm:rounded"
+      >
+        <img
+          alt="..."
+          :src="userInfo.avatar"
+          class="shadow-xl rounded-full sm:ml-6 h-auto border-none"
+          style="max-width: 150px"
+        />
+        <div class="flex-grow sm:ml-4 text-center sm:text-left">
+          <h3 class="text-4xl font-semibold leading-normal text-gray-800 mb-2">
+            {{ userInfo.username }}
+          </h3>
+          <p class="mr-2 text-lg text-gray-500 mb-2">
+            {{ userInfo.summary }}
+          </p>
+          <div class="flex justify-center sm:justify-start">
+            <a
+              v-if="userInfo.github_url"
+              :href="userInfo.github_url"
+              target="_blank"
+              class="mx-1"
+            >
+              <github-icon />
+            </a>
+            <a
+              v-if="userInfo.website_url"
+              :href="userInfo.website_url"
+              target="_blank"
+              rel="nofollow noopener noreferrer"
+              class="mx-1"
+            >
+              <external-link-icon />
+            </a>
+          </div>
+        </div>
+        <button
+          class="sm:mr-6 px-5 py-2 rounded-md bg-white text-green-500 border border-green-500 focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-green-600 focus:outline-none"
         >
-          Follow
-        </a>
-        <div v-if="user.summary" class="summary">{{ user.summary }}</div>
-        <div class="links">
-          <a
-            v-if="user.twitter_username"
-            :href="`https://twitter.com/${user.twitter_username}`"
-            target="_blank"
-          >
-            <twitter-icon />
-          </a>
-          <a
-            v-if="user.github_username"
-            :href="`https://github.com/${user.github_username}`"
-            target="_blank"
-          >
-            <github-icon />
-          </a>
-          <a
-            v-if="user.website_url"
-            :href="user.website_url"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-          >
-            <external-link-icon />
-          </a>
-        </div>
-      </div>
-
-      <div class="info">
-        <div v-if="user.location">
-          <div class="title">location</div>
-          <div class="content">{{ user.location }}</div>
-        </div>
-        <div v-if="user.joined_at">
-          <div class="title">joined</div>
-          <div class="content">{{ user.joined_at }}</div>
-        </div>
+          关注
+        </button>
       </div>
     </template>
-  </section>
+  </div>
 </template>
 
 <script>
 import InlineErrorBlock from "@/components/blocks/InlineErrorBlock";
-import TwitterIcon from "~/assets/icons/twitter.svg?inline";
 import GithubIcon from "~/assets/icons/github.svg?inline";
 import ExternalLinkIcon from "~/assets/icons/external-link.svg?inline";
+
 export default {
   components: {
-    TwitterIcon,
+    InlineErrorBlock,
     GithubIcon,
     ExternalLinkIcon,
-    InlineErrorBlock,
   },
   data() {
     return {
-      user: {},
+      hasUser: true, // 用户是否存在
+      userInfo: {},
     };
   },
   head() {
     return {
-      title: this.user.name,
+      title: `${this.userInfo.username} 的个人主页`,
     };
   },
   async fetch() {
-    const res = await this.$axios.get(`/users/by_username`, {
-      params: {
-        url: this.$route.params.username,
-      },
-    });
-    this.user = await res.data;
+    const res = await this.$axios.$get(`/user/${this.$route.params.id}`);
+    try {
+      if (res.code === 0) {
+        this.hasUser = true;
+        this.userInfo = res.data.user;
+      } else {
+        // id合法, 但用户不存在
+        this.hasUser = false;
+        this.userInfo = {};
+      }
+    } catch (error) {
+      this.hasUser = false;
+      this.userInfo = {};
+    }
   },
 };
 </script>
