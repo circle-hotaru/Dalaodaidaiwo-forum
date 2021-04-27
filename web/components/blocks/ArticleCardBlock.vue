@@ -1,27 +1,21 @@
 <template>
-  <article class="bg-white shadow mb-2">
-    <img
-      v-if="article.social_image"
-      class="h-60 w-full bg-gray-200"
-      :src="article.social_image"
-      alt=""
-    />
+  <article class="shadow rounded-lg bg-white">
     <div class="px-2 py-4">
       <nuxt-link
-        :to="{ name: 'username', params: { username: article.user.username } }"
+        :to="{ name: 'id', params: { id: article.user._id } }"
         class="flex items-center"
       >
         <img
           class="w-8 h-8 bg-gray-500 rounded-full mr-2 flex-none object-cover"
-          :src="article.user.profile_image"
+          :src="article.user.avatar"
           alt=""
         />
         <div>
           <h3 class="text-gray-600 font-semibold text-sm">
-            {{ article.user.name }}
+            {{ article.user.username }}
           </h3>
           <p class="text-xs text-gray-500">
-            {{ article.readable_publish_date }}
+            {{ article.createDate | formatTime }}
           </p>
         </div>
       </nuxt-link>
@@ -29,8 +23,8 @@
         <h2 class="text-xl md:text-3xl mt-4 font-bold hover:text-primary-500">
           <nuxt-link
             :to="{
-              name: 'username-article',
-              params: { username: article.user.username, article: article.id },
+              name: 'id-article',
+              params: { id: article.user._id, article: article._id },
             }"
             >{{ article.title }}</nuxt-link
           >
@@ -38,11 +32,11 @@
         <ul class="flex mt-2">
           <li
             class="mr-2 text-sm flex-none text-gray-500 hover:text-gary-900"
-            v-for="(tag, index) in article.tag_list"
+            v-for="(tag, index) in article.tags"
             :key="index"
           >
-            <nuxt-link :to="{ name: 'tags-tag', params: { tag: tag } }"
-              >#{{ tag }}</nuxt-link
+            <nuxt-link :to="{ name: 'tags-tag', params: { tag: tag.name } }"
+              >#{{ tag.name }}</nuxt-link
             >
           </li>
         </ul>
@@ -93,15 +87,12 @@
                     />
                   </svg>
                 </div>
-
                 <span class="hidden md:inline">评论</span>
               </div>
             </button>
           </div>
           <div>
-            <span class="text-xs mr-2"
-              >{{ article.create_at | formatTime }} read</span
-            >
+            <span class="text-xs mr-2">5 min read</span>
             <button
               class="px-4 py-2 text-gray-700 hover:bg-gray-300 mr-2 text-sm rounded-md bg-gray-200 focus:outline-none"
             >
@@ -124,7 +115,7 @@ export default {
   },
   filters: {
     formatTime: function (value) {
-      return moment(value).endOf("day").fromNow();
+      return moment(value, "YYYY-MM-DD").endOf("day").fromNow();
     },
   },
 };

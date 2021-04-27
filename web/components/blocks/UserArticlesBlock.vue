@@ -1,5 +1,5 @@
 <template>
-  <div class="username-articles-block">
+  <div class="w-2/3">
     <template v-if="$fetchState.pending">
       <div class="article-cards-wrapper">
         <content-placeholders
@@ -17,12 +17,11 @@
       <inline-error-block :error="$fetchState.error" />
     </template>
     <template v-else>
-      <div class="article-cards-wrapper">
+      <div class="flex flex-col space-y-2">
         <article-card-block
           v-for="article in articles"
-          :key="article.id"
+          :key="article._id"
           :article="article"
-          class="article-card-block"
         />
       </div>
     </template>
@@ -39,16 +38,29 @@ export default {
   },
   data() {
     return {
+      page: 1, // 页数
       articles: null,
     };
   },
   async fetch() {
-    const res = await this.$axios.get(`/articles`, {
-      params: {
-        username: this.$route.params.username,
-      },
-    });
-    this.articles = await res.data;
+    this.getUserArticleList();
+  },
+
+  methods: {
+    // 获取文章列表
+    async getUserArticleList() {
+      const page = this.page;
+      const res = await this.$axios.$get(
+        `/${this.$route.params.id}/user-article`,
+        {
+          params: { page, pageSize: 5 },
+        }
+      );
+      console.log(res);
+      if (res.code === 0) {
+        this.articles = res.data.articleList;
+      }
+    },
   },
 };
 </script>

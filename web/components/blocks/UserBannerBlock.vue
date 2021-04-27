@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full md:w-11/12 max-w-screen-lg">
     <template v-if="$fetchState.pending">
       <div class="image-wrapper loading">
         <content-placeholders>
@@ -22,7 +22,7 @@
     </template>
     <template v-else>
       <div
-        class="w-full sm:w-4/5 max-w-5xl sm:mx-auto flex flex-col sm:flex-row space-y-2 justify-center items-center sm:justify-between bg-white p-4 sm:rounded"
+        class="flex flex-col sm:flex-row space-y-2 justify-center items-center sm:justify-between bg-white p-4 sm:rounded"
       >
         <img
           alt="..."
