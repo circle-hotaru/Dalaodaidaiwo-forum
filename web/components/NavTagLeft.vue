@@ -29,7 +29,6 @@ export default {
     // 获取标签列表
     async getTagList() {
       const res = await this.$axios.get("/tag");
-      console.log(res);
       if (res.data.code === 0) {
         this.tagList = res.data.data.tagList;
       }

@@ -57,7 +57,7 @@ export default {
         this.$store.commit("login", res.data);
         // 重定向到上一页 或 回到首页
         const { redirect } = this.$route.query;
-        redirect ? this.$router.push(redirect) : this.$router.push("/home");
+        redirect ? this.$router.push(redirect) : this.$router.push("/");
       }
     },
   },

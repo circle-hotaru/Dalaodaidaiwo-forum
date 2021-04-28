@@ -23,8 +23,8 @@
         <h2 class="text-xl md:text-3xl mt-4 font-bold hover:text-primary-500">
           <nuxt-link
             :to="{
-              name: 'id-article',
-              params: { id: article.user._id, article: article._id },
+              name: 'id-articleId',
+              params: { id: article.user._id, articleId: article._id },
             }"
             >{{ article.title }}</nuxt-link
           >
