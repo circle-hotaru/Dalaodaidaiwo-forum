@@ -1,35 +1,38 @@
 <template>
-  <div class="md:flex">
-    <div class="hidden md:block w-1/3 lg:w-1/4 px-4">
+  <div class="w-screen flex justify-center">
+    <div
+      class="w-full md:w-11/12 max-w-screen-lg flex justify-center md:justify-between md:space-x-4"
+    >
       <slider-left />
-    </div>
-
-    <div class="md:w-2/3 lg:w-2/4 md:px-4">
-      <div class="flex justify-between items-center">
-        <h1 class="text-2xl md:text-3xl font-bold p-4">文章</h1>
-        <div class="hidden md:block">
-          <tabs />
+      <div class="w-full md:w-2/3">
+        <div class="flex justify-between items-center">
+          <h1 class="text-2xl md:text-3xl font-bold p-4">文章</h1>
+          <div class="hidden md:block">
+            <tabs />
+          </div>
         </div>
+
+        <template v-if="$fetchState.pending">
+          <skeleton-card-article v-for="index in this.pageSize" :key="index" />
+        </template>
+
+        <template v-else-if="$fetchState.error">
+          <inline-error-block :error="$fetchState.error" />
+        </template>
+
+        <template v-else>
+          <div class="flex flex-col space-y-2">
+            <article-card-block
+              v-for="(article, i) in articles"
+              v-observe-visibility="
+                i === articles.length - 1 ? lazyLoadArticles : false
+              "
+              :key="article._id"
+              :article="article"
+            />
+          </div>
+        </template>
       </div>
-
-      <template v-if="$fetchState.pending">
-        <skeleton-card-article v-for="index in 30" :key="index" />
-      </template>
-
-      <template v-else-if="$fetchState.error">
-        <inline-error-block :error="$fetchState.error" />
-      </template>
-
-      <template v-else>
-        <article-card-block
-          v-for="(article, i) in articles"
-          v-observe-visibility="
-            i === articles.length - 1 ? lazyLoadArticles : false
-          "
-          :key="article.id"
-          :article="article"
-        />
-      </template>
     </div>
   </div>
 </template>
@@ -53,6 +56,8 @@ export default {
     return {
       articles: [],
       page: 1,
+      pageSize: 10,
+      hasNext: false,
     };
   },
 
@@ -68,33 +73,25 @@ export default {
 
   methods: {
     async getArticles() {
-      const res = await this.$axios.get("/articles", {
+      const res = await this.$axios.$get("/articles", {
         params: {
-          state: "rising",
-          tag: "nuxt",
           page: this.page,
+          pageSize: this.pageSize,
         },
       });
-      const newArticles = res.data.map((item, i) => {
-        if (i === 0) {
-          return {
-            ...item,
-          };
-        } else {
-          delete item.social_image;
-          return {
-            ...item,
-          };
-        }
-      });
-
-      this.articles = this.articles.concat(newArticles);
+      if (res.code === 0) {
+        const newArticles = res.data.articleList;
+        this.articles = this.articles.concat(newArticles);
+        this.hasNext = res.data.hasNext;
+      }
     },
 
     lazyLoadArticles(isVisible) {
-      if (isVisible) {
-        this.page++;
-        this.$fetch();
+      if (this.hasNext) {
+        if (isVisible) {
+          this.page++;
+          this.$fetch();
+        }
       }
     },
   },

@@ -1,6 +1,8 @@
 <template>
-  <div class="space-y-2">
-    <div class="md:border border-b md:rounded-md bg-white p-4 hidden md:block">
+  <div
+    class="hidden md:flex md:flex-auto md:flex-col md:items-start space-y-2 md:p-4 rounded-lg bg-white"
+  >
+    <!-- <div class="md:border border-b md:rounded-md bg-white p-4 hidden md:block">
       <h2 class="text-lg font-bold">
         <span class="text-primary-500">DEV Community</span> is a community of
         573,072 amazing developers
@@ -19,7 +21,7 @@
       >
         Log in
       </button>
-    </div>
+    </div> -->
     <nav-left />
     <nav-tag-left />
   </div>
