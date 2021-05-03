@@ -13,7 +13,7 @@
         class="mb-3 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-bule-500"
       />
       <input
-        type="text"
+        type="password"
         v-model="user.password"
         placeholder="密码"
         class="mb-3 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-blue-500"

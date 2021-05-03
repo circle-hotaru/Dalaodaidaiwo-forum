@@ -23,6 +23,8 @@
         <input
           type="text"
           placeholder="搜索"
+          v-model="keyword"
+          @keyup.enter="submit"
           class="text-gray-600 placeholder-gray-600 rounded-md p-4 h-10 bg-gray-100 w-full border border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
       </div>
@@ -74,6 +76,16 @@ import Profile from "@/components/Profile";
 export default {
   components: {
     Profile,
+  },
+  data() {
+    return {
+      keyword: "",
+    };
+  },
+  methods: {
+    submit() {
+      this.$router.push({ path: "/search", query: { q: this.keyword } });
+    },
   },
   computed: {
     haslogin() {

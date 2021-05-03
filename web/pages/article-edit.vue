@@ -165,10 +165,12 @@ export default {
       // 发送的数据对象
       const data = { title, tags, content_md, content_html };
       // 新增或更新文章
-      const res = await this.$axios.post("/article", data);
+      const res = await this.$axios.$post("/article", data);
       // 操作成功
       if (res.code === 0) {
-        this.$router.push("/");
+        // 重定向到上一页 或 回到首页
+        const { redirect } = this.$route.query;
+        redirect ? this.$router.push(redirect) : this.$router.push("/");
       }
     },
 

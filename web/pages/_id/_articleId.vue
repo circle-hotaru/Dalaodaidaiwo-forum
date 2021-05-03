@@ -6,10 +6,30 @@
       <div class="w-full lg:w-3/4 flex justify-center space-x-2">
         <!-- left -->
         <div class="hidden md:block w-16 flex-none">
-          <left-func-block
-            :positive_reactions_count="article.positive_reactions_count"
-            :comments_count="article.comments_count"
-          />
+          <div class="pt-4 flex flex-col space-y-2 justify-center items-center">
+            <div
+              class="flex flex-col items-center cursor-pointer"
+              @click="action('like', 'isLike')"
+            >
+              <fa
+                :icon="['far', 'heart']"
+                class="fa-2x hover:text-red-700"
+                :class="{ 'text-red-700': status.isLike }"
+              />
+              <p>{{ article.like }}</p>
+            </div>
+            <div
+              class="flex flex-col items-center cursor-pointer"
+              @click="action('collect', 'isCollect')"
+            >
+              <fa
+                :icon="['far', 'star']"
+                class="fa-2x hover:text-red-700"
+                :class="{ 'text-red-700': status.isCollect }"
+              />
+              <p>{{ article.collect }}</p>
+            </div>
+          </div>
         </div>
 
         <div class="flex-auto">
@@ -25,11 +45,11 @@
                   <ul class="flex space-x-1 mt-2">
                     <li
                       v-for="tag in article.tags"
-                      :key="tag"
+                      :key="tag.name"
                       class="px-1 rounded-md"
                     >
                       <nuxt-link
-                        :to="{ name: 'tags-tag', params: { tag: tag } }"
+                        :to="{ name: 'tags-tag', params: { tag: tag.name } }"
                         >#{{ tag.name }}</nuxt-link
                       >
                     </li>
@@ -59,7 +79,7 @@
               </div>
             </article>
           </div>
-          <div class="p-4 bg-white shadow mt-4">
+          <!-- <div class="p-4 bg-white shadow mt-4">
             <div class="flex justify-between items-center">
               <h3 class="text-xl font-bold">
                 Discussion {{ article.comments_count }}
@@ -77,7 +97,7 @@ Add to the discussion</textarea
               >
             </div>
           </div>
-          <comments-block class="comments-block" />
+          <comments-block class="comments-block" /> -->
         </div>
       </div>
 
@@ -101,11 +121,12 @@ Add to the discussion</textarea
               </h2>
             </div>
           </nuxt-link>
-          <button
+          <!-- <button
             class="w-full bg-blue-700 text-white p-2 rounded-lg font-medium focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
+            :class="{ hidden: userInfo.isOwn }"
           >
             关注
-          </button>
+          </button> -->
           <div v-if="user.summary">
             <div class="font-medium text-gray-500">关于</div>
             <div>{{ user.summary }}</div>
@@ -126,18 +147,13 @@ Add to the discussion</textarea
 
 <script>
 import moment from "moment";
-import CommentsBlock from "@/components/blocks/CommentsBlock";
-import LeftFuncBlock from "@/components/blocks/LeftFuncBlock";
 
 export default {
-  components: {
-    CommentsBlock,
-    LeftFuncBlock,
-  },
   data() {
     return {
       user: {},
       article: {},
+      status: {},
     };
   },
   head() {
@@ -148,6 +164,7 @@ export default {
 
   async fetch() {
     await this.getArticle();
+    await this.getStatus();
   },
 
   methods: {
@@ -155,10 +172,43 @@ export default {
       const res = await this.$axios.$get(
         `/article/${this.$route.params.articleId}`
       );
-      console.log(res);
       if (res.code === 0) {
         this.article = res.data.article;
         this.user = res.data.article.user;
+      }
+    },
+
+    // 获取登录用户的操作状态
+    async getStatus() {
+      const res = await this.$axios.$get(
+        `/status/${this.$route.params.articleId}`,
+        { params: { object: "Article" } }
+      );
+      console.log("用户状态：", res);
+      if (res.code === 0) {
+        this.status = res.data.status;
+      }
+    },
+
+    // 用户行为操作（一个函数包含6种操作）
+    async action(type, isType) {
+      const data = { object: "Article", type };
+      let res;
+      if (!this.status[isType]) {
+        res = await this.$axios.$post(
+          `/action/${this.$route.params.articleId}`,
+          data
+        );
+      } else {
+        res = await this.$axios.$put(
+          `/action/${this.$route.params.articleId}`,
+          data
+        );
+      }
+      if (res.code === 0) {
+        // 重新获取文章详情和用户操作状态
+        this.getArticle();
+        this.getStatus();
       }
     },
   },

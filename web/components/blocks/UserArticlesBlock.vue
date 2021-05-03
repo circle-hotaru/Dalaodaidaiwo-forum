@@ -1,36 +1,21 @@
 <template>
   <div class="w-2/3">
-    <template v-if="$fetchState.pending">
-      <div class="article-cards-wrapper">
-        <content-placeholders
-          v-for="p in 30"
-          :key="p"
-          rounded
-          class="article-card-block"
-        >
-          <content-placeholders-img />
-          <content-placeholders-text :lines="3" />
-        </content-placeholders>
-      </div>
-    </template>
-    <template v-else-if="$fetchState.error">
-      <inline-error-block :error="$fetchState.error" />
-    </template>
-    <template v-else>
-      <div class="flex flex-col space-y-2">
-        <article-card-block
-          v-for="article in articles"
-          :key="article._id"
-          :article="article"
-        />
-      </div>
-    </template>
+    <div class="flex flex-col space-y-2">
+      <div class="border shadow rounded-lg bg-white"><div id="echart" /></div>
+      <article-card-block
+        v-for="article in articles"
+        :key="article._id"
+        :article="article"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import ArticleCardBlock from "@/components/blocks/ArticleCardBlock";
 import InlineErrorBlock from "@/components/blocks/InlineErrorBlock";
+import echarts from "echarts";
+
 export default {
   components: {
     ArticleCardBlock,
@@ -39,13 +24,48 @@ export default {
   data() {
     return {
       page: 1, // 页数
-      articles: null,
+      articles: [],
     };
+  },
+  mounted() {
+    const pieChartElement = this.$el.querySelector("#echart");
+    const pieChart = echarts.init(pieChartElement);
+    const options = {
+      title: {
+        text: "标签比重",
+        top: "10px",
+        left: "center",
+      },
+      tooltip: {
+        trigger: "item",
+      },
+      series: [
+        {
+          name: "标签",
+          type: "pie",
+          radius: "50%",
+          data: [
+            { value: 8, name: "VueJS" },
+            { value: 5, name: "NodeJS" },
+            { value: 8, name: "NuxtJS" },
+            { value: 4, name: "Python" },
+            { value: 2, name: "JavaScript" },
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
+        },
+      ],
+    };
+    pieChart.setOption(options);
   },
   async fetch() {
     this.getUserArticleList();
   },
-
   methods: {
     // 获取文章列表
     async getUserArticleList() {
@@ -56,7 +76,6 @@ export default {
           params: { page, pageSize: 5 },
         }
       );
-      console.log(res);
       if (res.code === 0) {
         this.articles = res.data.articleList;
       }
@@ -64,3 +83,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#echart {
+  height: 350px;
+}
+</style>

@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default function ({ $axios }) {
   $axios.onRequest(config => {
     const token = localStorage.getItem('access_token')

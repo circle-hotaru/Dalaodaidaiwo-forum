@@ -12,14 +12,7 @@
         </template>
 
         <template v-else>
-          <tag
-            v-for="(tag, index) in tags"
-            :key="index"
-            v-observe-visibility="
-              index === tags.length - 1 ? lazyLoadTags : false
-            "
-            :tag="tag"
-          />
+          <tag v-for="(tag, index) in tags" :key="index" :tag="tag" />
         </template>
       </div>
     </div>
@@ -42,7 +35,7 @@ export default {
     return {
       tags: [],
       page: 1,
-      per_page: 18,
+      per_page: 10,
     };
   },
 
@@ -58,13 +51,9 @@ export default {
 
   methods: {
     async getTags() {
-      const res = await this.$axios.get("/tags", {
-        params: {
-          per_page: this.per_page,
-          page: this.page,
-        },
-      });
-      this.tags = this.tags.concat(res.data);
+      const res = await this.$axios.$get("/tag");
+      console.log(res);
+      this.tags = res.data.tagList;
     },
 
     lazyLoadTags(isVisible) {

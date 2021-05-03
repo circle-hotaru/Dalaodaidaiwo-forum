@@ -58,7 +58,16 @@
           </div>
         </div>
         <button
+          v-if="userInfo.isFollow"
           class="sm:mr-6 px-5 py-2 rounded-md bg-white text-green-500 border border-green-500 focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-green-600 focus:outline-none"
+          :class="{ hidden: userInfo.isOwn }"
+        >
+          取消关注
+        </button>
+        <button
+          v-else
+          class="sm:mr-6 px-5 py-2 rounded-md bg-white text-green-500 border border-green-500 focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-green-600 focus:outline-none"
+          :class="{ hidden: userInfo.isOwn }"
         >
           关注
         </button>

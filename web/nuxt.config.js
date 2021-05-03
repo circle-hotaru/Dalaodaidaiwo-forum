@@ -1,6 +1,6 @@
 export default {
   server: {
-    port: 3002,
+    port: 3001,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -27,7 +27,9 @@ export default {
     '~/plugins/vue-placeholders.js',
     '~/plugins/vue-observe-visibility.client.js',
     { src: '~/plugins/axios.js', ssr: false },
-    { src: '~/plugins/vue-mavon-editor', ssr: false }
+    { src: '~/plugins/vue-mavon-editor', ssr: false },
+    '~/plugins/font-awesome',
+    // '~/plugins/echarts',
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -41,12 +43,34 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    'nuxt-fontawesome'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: 'http://localhost:3009/api/web',
     timeout: 20000
+  },
+
+  fontawesome: {
+    // See https://github.com/vaso2/nuxt-fontawesome
+    // 这里设置了组建的标签为fa
+    // 如果不设置，则默认为在font-awesome.js中，生成的：font-awesome-icon
+    component: 'fa',
+    imports: [
+      {
+        set: '@fortawesome/free-solid-svg-icons',
+        icons: ['fas']
+      },
+      {
+        set: '@fortawesome/free-regular-svg-icons',
+        icons: ['far']
+      },
+      {
+        set: '@fortawesome/free-brands-svg-icons',
+        icons: ['fab']
+      }
+    ]
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
