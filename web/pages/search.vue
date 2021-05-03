@@ -11,12 +11,14 @@
           <li
             @click="type = 0"
             class="w-full py-2 pl-2 rounded-lg hover:bg-gray-100 hover:text-blue-700"
+            :class="{ 'bg-white shadow': !type }"
           >
             文章
           </li>
           <li
             @click="type = 1"
             class="w-full py-2 pl-2 rounded-lg hover:bg-gray-100 hover:text-blue-700"
+            :class="{ 'bg-white shadow': type }"
           >
             用户
           </li>

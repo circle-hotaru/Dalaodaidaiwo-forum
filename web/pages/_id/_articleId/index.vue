@@ -41,7 +41,7 @@
                 >
                   {{ article.title }}
                 </h1>
-                <div class="mt-2 text-gray-600">
+                <div class="mt-2 space-y-2 text-gray-600">
                   <ul class="flex space-x-1 mt-2">
                     <li
                       v-for="tag in article.tags"
@@ -54,26 +54,35 @@
                       >
                     </li>
                   </ul>
-                  <nuxt-link
-                    :to="{
-                      name: 'id',
-                      params: { id: user._id },
-                    }"
-                    v-if="article.user"
-                    class="mt-4 flex items-center"
-                  >
-                    <img
-                      :src="user.avatar"
-                      :alt="user.username"
-                      class="w-10 h-10 bg-gray-300 rounded-full mr-3"
-                    />
-                    <p class="text-gray-800">{{ user.username }}</p>
-                  </nuxt-link>
-                  <div class="my-4">
-                    <p class="text-gray-500 text-sm">
-                      {{ article.createDate | formatTime }}・3 min read
-                    </p>
+                  <div class="flex items-center space-x-2">
+                    <nuxt-link
+                      :to="{
+                        name: 'id',
+                        params: { id: user._id },
+                      }"
+                      v-if="article.user"
+                      class="flex items-center"
+                    >
+                      <img
+                        :src="user.avatar"
+                        :alt="user.username"
+                        class="w-10 h-10 bg-gray-300 rounded-full mr-3"
+                      />
+                      <p class="text-gray-800">{{ user.username }}</p>
+                    </nuxt-link>
+                    <nuxt-link
+                      v-if="status.isOwn"
+                      :to="{
+                        name: 'id-articleId-edit',
+                        params: { id: user._id, articleId: article._id },
+                      }"
+                      class="text-blue-700"
+                      >编辑</nuxt-link
+                    >
                   </div>
+                  <p class="text-gray-500 text-sm">
+                    {{ article.createDate | formatTime }}・3 min read
+                  </p>
                 </div>
                 <div class="" v-html="article.content_html"></div>
               </div>
@@ -121,12 +130,18 @@ Add to the discussion</textarea
               </h2>
             </div>
           </nuxt-link>
-          <!-- <button
+          <button
+            v-if="!user.isOwn && !user.isFollow"
             class="w-full bg-blue-700 text-white p-2 rounded-lg font-medium focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
-            :class="{ hidden: userInfo.isOwn }"
           >
-            关注
-          </button> -->
+            关注TA
+          </button>
+          <button
+            v-if="!user.isOwn && user.isFollow"
+            class="w-full bg-blue-700 text-white p-2 rounded-lg font-medium focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
+          >
+            取消关注
+          </button>
           <div v-if="user.summary">
             <div class="font-medium text-gray-500">关于</div>
             <div>{{ user.summary }}</div>

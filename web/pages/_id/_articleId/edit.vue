@@ -116,6 +116,7 @@ export default {
         subfield: true, // 单双栏模式
         preview: true, // 预览
       },
+      articleId: this.$route.params.articleId,
       pageTitle: "写文章",
       // MD 编辑器内容
       content: "开始编辑",
@@ -139,6 +140,19 @@ export default {
     this.filteredTags = this.tagList;
   },
   methods: {
+    // 获取文章详情
+    async getArticle() {
+      const res = await this.$axios.$get(`/article/${this.articleId}`);
+      console.log(res);
+      if (res.code === 0) {
+        // 设置文章数据
+        const { title, tags, content_md } = res.data.article;
+        this.article.title = title;
+        this.article.tags = tags;
+        this.content = content_md;
+      }
+    },
+
     // 获取标签列表
     async getTagList() {
       const res = await this.$axios.get("/tag");
@@ -159,11 +173,21 @@ export default {
     async save() {
       const { title, content_md, content_html } = this.article;
       let { tags } = this.article;
+      const articleId = this.articleId;
       tags = tags.map((item) => item._id);
+      // 不能为空 下次一定
+      // if (!title || !tags.length || !content_md || !content_html) {
+      //   return this.$message({ type: "error", message: "请将信息填写完整" });
+      // }
       // 发送的数据对象
       const data = { title, tags, content_md, content_html };
       // 新增或更新文章
-      const res = await this.$axios.$post("/article", data);
+      let res;
+      if (articleId) {
+        res = await this.$axios.$put(`/article/${articleId}`, data);
+      } else {
+        res = await this.$axios.$post("/article", data);
+      }
       // 操作成功
       if (res.code === 0) {
         // 重定向到上一页 或 回到首页
