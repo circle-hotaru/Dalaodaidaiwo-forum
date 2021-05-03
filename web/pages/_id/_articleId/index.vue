@@ -68,7 +68,9 @@
                         :alt="user.username"
                         class="w-10 h-10 bg-gray-300 rounded-full mr-3"
                       />
-                      <p class="text-gray-800">{{ user.username }}</p>
+                      <p class="font-semibold text-gray-800">
+                        {{ user.username }}
+                      </p>
                     </nuxt-link>
                     <nuxt-link
                       v-if="status.isOwn"
@@ -79,12 +81,19 @@
                       class="text-blue-700"
                       >编辑</nuxt-link
                     >
+                    <button
+                      v-if="status.isOwn"
+                      @click="delArticle(article._id)"
+                      class="text-red-500"
+                    >
+                      删除
+                    </button>
                   </div>
                   <p class="text-gray-500 text-sm">
                     {{ article.createDate | formatTime }}・3 min read
                   </p>
                 </div>
-                <div class="" v-html="article.content_html"></div>
+                <div class="mt-4" v-html="article.content_html"></div>
               </div>
             </article>
           </div>
@@ -199,7 +208,6 @@ export default {
         `/status/${this.$route.params.articleId}`,
         { params: { object: "Article" } }
       );
-      console.log("用户状态：", res);
       if (res.code === 0) {
         this.status = res.data.status;
       }
@@ -224,6 +232,14 @@ export default {
         // 重新获取文章详情和用户操作状态
         this.getArticle();
         this.getStatus();
+      }
+    },
+
+    async delArticle(id) {
+      const res = await this.$axios.$delete(`/article/${id}`);
+      if (res.code === 0) {
+        const { redirect } = this.$route.query;
+        redirect ? this.$router.push(redirect) : this.$router.push("/");
       }
     },
   },
