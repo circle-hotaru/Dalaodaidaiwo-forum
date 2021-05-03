@@ -60,6 +60,16 @@
               </a>
             </div>
           </div>
+          <nuxt-link
+            :to="{ name: 'id-editProfile', params: { id: userInfo._id } }"
+          >
+            <button
+              v-if="userInfo.isOwn"
+              class="sm:mr-6 px-5 py-2 rounded-md bg-white text-green-500 border border-green-500 focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-green-600 focus:outline-none"
+            >
+              编辑资料
+            </button>
+          </nuxt-link>
           <button
             v-if="!userInfo.isOwn && !userInfo.isFollow"
             class="sm:mr-6 px-5 py-2 rounded-md bg-white text-green-500 border border-green-500 focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-green-600 focus:outline-none"
