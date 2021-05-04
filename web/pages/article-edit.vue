@@ -134,7 +134,6 @@ export default {
     };
   },
   async fetch() {
-    await this.getArticle();
     await this.getTagList();
     this.filteredTags = this.tagList;
   },

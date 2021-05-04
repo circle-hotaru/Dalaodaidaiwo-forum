@@ -12,9 +12,7 @@
           >
             <h2 class="w-full text-xl font-semibold">基本信息</h2>
             <div class="w-full flex flex-col space-y-2">
-              <label for="userInfo[username]" class="font-semibold"
-                >用户名</label
-              >
+              <label for="userInfo[username]">用户名</label>
               <input
                 type="text"
                 maxlength="30"
@@ -54,6 +52,68 @@
                   class="w-full p-3 border border-gray-400 flex-1 rounded-md"
                 />
               </div>
+            </div>
+          </div>
+
+          <!-- 其他信息 -->
+          <div
+            class="w-full flex flex-col items-center border rounded shadow p-4 space-y-4"
+          >
+            <h2 class="w-full text-xl font-semibold">其他</h2>
+            <div class="w-full flex flex-col space-y-2">
+              <label for="userInfo.sex">性别</label>
+              <select
+                v-model="userInfo.sex"
+                id="userInfo.sex"
+                name="userInfo.sex"
+                class="w-full p-3 border border-gray-400 rounded-md focus:outline-none focus:ring-1 ring-blue-500"
+              >
+                <option disabled selected value>选择你的性别</option>
+                <option value="male">male</option>
+                <option value="female">female</option>
+                <option value="unisex">unisex</option>
+              </select>
+            </div>
+            <div class="w-full flex flex-col space-y-2">
+              <label for="userInfo.summary">简介</label>
+              <textarea
+                v-model="userInfo.summary"
+                placeholder="介绍一下你自己吧~"
+                id="userInfo.summary"
+                class="w-full py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-blue-500"
+              />
+            </div>
+            <div class="w-full flex flex-col space-y-2">
+              <label for="userInfo.website_url">website url</label>
+              <input
+                type="text"
+                v-model="userInfo.website_url"
+                placeholder="https://yoursite.com"
+                id="userInfo.website_url"
+                class="w-full py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-bule-500"
+              />
+            </div>
+            <div class="w-full flex flex-col space-y-2">
+              <label for="userInfo.github_url">Github URL</label>
+              <input
+                type="text"
+                maxlength="30"
+                v-model="userInfo.github_url"
+                placeholder="https://github.com/yourname"
+                id="userInfo.github_url"
+                class="w-full py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-blue-500"
+              />
+            </div>
+            <div class="w-full flex flex-col space-y-2">
+              <label for="userInfo.job">职位</label>
+              <input
+                type="text"
+                maxlength="30"
+                v-model="userInfo.job"
+                placeholder="前端开发工程师"
+                id="userInfo.job"
+                class="w-full py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-blue-500"
+              />
             </div>
           </div>
 
