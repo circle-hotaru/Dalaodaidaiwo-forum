@@ -26,7 +26,7 @@
           class="flex flex-col sm:flex-row space-y-2 justify-center items-center sm:justify-between bg-white p-4 sm:rounded"
         >
           <img
-            alt="..."
+            alt="avatar"
             :src="userInfo.avatar"
             class="shadow-xl rounded-full sm:ml-6 h-auto border-none"
             style="max-width: 150px"
@@ -96,37 +96,71 @@
     <div
       class="w-full md:w-11/12 max-w-screen-lg mt-4 flex justify-between space-x-4"
     >
-      <nuxt-link
-        :to="{ name: 'id-followList', params: { id: userInfo._id } }"
+      <div
         class="hidden md:flex h-36 md:flex-auto md:justify-around md:items-center text-lg md:p-4 md:space-x-2 border shadow rounded-lg bg-white"
       >
-        <div class="flex flex-col items-center space-y-2">
+        <div
+          @click="getFollowsList"
+          class="flex flex-col items-center space-y-2 cursor-pointer"
+        >
           <p>关注了</p>
           {{ userInfo.numFollows }}
         </div>
-        <div class="flex flex-col items-center space-y-2">
+        <div
+          @click="getFansList"
+          class="flex flex-col items-center space-y-2 cursor-pointer"
+        >
           <p>关注者</p>
           {{ userInfo.numFans }}
         </div>
-      </nuxt-link>
-      <user-articles-block />
+      </div>
+
+      <!-- 右侧 -->
+      <div class="w-2/3">
+        <div v-if="!type" class="flex flex-col space-y-2">
+          <user-card
+            v-for="(user, index) in followsList"
+            :key="user._id"
+            :user="user"
+            v-observe-visibility="
+              index === followsList.length - 1 ? lazyLoad : false
+            "
+          />
+        </div>
+        <div v-if="type" class="flex flex-col space-y-2">
+          <user-card
+            v-for="(user, index) in fansList"
+            :key="user._id"
+            :user="user"
+            v-observe-visibility="
+              index === fansList.length - 1 ? lazyLoad : false
+            "
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import InlineErrorBlock from "@/components/blocks/InlineErrorBlock";
-import UserArticlesBlock from "@/components/blocks/UserArticlesBlock";
+import UserCard from "@/components/blocks/UserCard";
 
 export default {
   components: {
     InlineErrorBlock,
-    UserArticlesBlock,
+    UserCard,
   },
   data() {
     return {
       hasUser: true, // 用户是否存在
       userInfo: {},
+      type: 0, // 0 关注列表， 1 粉丝列表
+      followsList: [],
+      fansList: [],
+      page: 1,
+      pageSize: 10,
+      hasNext: false,
     };
   },
   head() {
@@ -136,6 +170,8 @@ export default {
   },
   async fetch() {
     await this.getUserInfo();
+    await this.getFollowsList();
+    await this.getFansList();
   },
   methods: {
     async getUserInfo() {
@@ -154,6 +190,39 @@ export default {
         this.userInfo = {};
       }
     },
+
+    // 获取粉丝列表
+    async getFansList() {
+      const { page, pageSize } = this;
+      const res = await this.$axios.$get(
+        `/${this.$route.params.id}/user-fans`,
+        {
+          params: { page, pageSize },
+        }
+      );
+      if (res.code === 0) {
+        this.fansList = res.data.fansList;
+        this.hasNext = res.data.hasNext;
+        this.type = 1;
+      }
+    },
+
+    // 获取关注列表
+    async getFollowsList() {
+      const { page, pageSize } = this;
+      const res = await this.$axios.$get(
+        `/${this.$route.params.id}/user-follows`,
+        {
+          params: { page, pageSize },
+        }
+      );
+      if (res.code === 0) {
+        this.followsList = res.data.followsList;
+        this.hasNext = res.data.hasNext;
+        this.type = 0;
+      }
+    },
+
     // 关注用户
     async followUser() {
       const res = await this.$axios.$put(
@@ -172,9 +241,15 @@ export default {
         this.getUserInfo();
       }
     },
+
+    lazyLoad(isVisible) {
+      if (this.hasNext) {
+        if (isVisible) {
+          this.page++;
+          this.$fetch();
+        }
+      }
+    },
   },
 };
 </script>
-
-<style>
-</style>

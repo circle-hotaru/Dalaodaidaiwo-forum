@@ -44,5 +44,27 @@ export default {
       type: Object,
     },
   },
+  methods: {
+    async getUserInfo() {
+      const res = await this.$axios.$get(`/user/${this.user._id}`);
+      if (res.code === 0) {
+        this.user = res.data.user;
+      }
+    },
+    // 关注用户
+    async followUser() {
+      const res = await this.$axios.$put(`/user-follow/${this.user._id}`);
+      if (res.code === 0) {
+        this.getUserInfo();
+      }
+    },
+    // 取关用户
+    async unfollowUser() {
+      const res = await this.$axios.$delete(`/user-follow/${this.user._id}`);
+      if (res.code === 0) {
+        this.getUserInfo();
+      }
+    },
+  },
 };
 </script>

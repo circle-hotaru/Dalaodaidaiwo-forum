@@ -60,8 +60,6 @@
 
 <script>
 import SkeletonCardArticle from "@/components/placeholders/SkeletonCardArticle";
-import SliderLeft from "@/components/SliderLeft";
-import Tabs from "@/components/Tabs";
 import ArticleCardBlock from "@/components/blocks/ArticleCardBlock";
 import UserCard from "@/components/blocks/UserCard";
 import InlineErrorBlock from "@/components/blocks/InlineErrorBlock";
@@ -69,8 +67,6 @@ import InlineErrorBlock from "@/components/blocks/InlineErrorBlock";
 export default {
   components: {
     SkeletonCardArticle,
-    SliderLeft,
-    Tabs,
     ArticleCardBlock,
     UserCard,
     InlineErrorBlock,
