@@ -1,7 +1,9 @@
 <template>
   <div class="w-2/3">
     <div class="flex flex-col space-y-2">
-      <div class="border shadow rounded-lg bg-white"><div id="echart" /></div>
+      <div class="border shadow rounded-lg bg-white">
+        <div class="echart" style="width: 100%; height: 300px" />
+      </div>
       <article-card-block
         v-for="article in articles"
         :key="article._id"
@@ -25,45 +27,18 @@ export default {
     return {
       page: 1, // 页数
       articles: [],
-    };
-  },
-  mounted() {
-    const pieChartElement = this.$el.querySelector("#echart");
-    const pieChart = echarts.init(pieChartElement);
-    const options = {
-      title: {
-        text: "标签比重",
-        top: "10px",
-        left: "center",
-      },
-      tooltip: {
-        trigger: "item",
-      },
-      series: [
-        {
-          name: "标签",
-          type: "pie",
-          radius: "50%",
-          data: [
-            { value: 8, name: "VueJS" },
-            { value: 5, name: "NodeJS" },
-            { value: 8, name: "NuxtJS" },
-            { value: 4, name: "Python" },
-            { value: 2, name: "JavaScript" },
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)",
-            },
-          },
-        },
+      tagProportion: [{ value: 3, name: "VueJS" }],
+      testData: [
+        { value: 3, name: "VueJS" },
+        { value: 6, name: "HTML" },
+        { value: 10, name: "ReactJS" },
+        { value: 4, name: "CSS" },
+        { value: 8, name: "JavaScript" },
       ],
     };
-    pieChart.setOption(options);
   },
   async fetch() {
+    this.getUserTagProportion();
     this.getUserArticleList();
   },
   methods: {
@@ -80,12 +55,46 @@ export default {
         this.articles = res.data.articleList;
       }
     },
+
+    // 获取标签比重
+    async getUserTagProportion() {
+      const res = await this.$axios.$get(`/${this.$route.params.id}/user-tag`);
+      if (res.code === 0) {
+        this.tagProportion = res.data.tagProportion;
+        this.initChart();
+      }
+    },
+
+    initChart() {
+      const pieChartElement = this.$el.querySelector(".echart");
+      const pieChart = echarts.init(pieChartElement);
+      const options = {
+        title: {
+          text: "标签比重",
+          top: "10px",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+        },
+        series: [
+          {
+            name: "标签",
+            type: "pie",
+            radius: "50%",
+            data: this.tagProportion,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+      };
+      pieChart.setOption(options);
+    },
   },
 };
 </script>
-
-<style scoped>
-#echart {
-  height: 350px;
-}
-</style>

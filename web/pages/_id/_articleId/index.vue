@@ -140,14 +140,16 @@ Add to the discussion</textarea
             </div>
           </nuxt-link>
           <button
-            v-if="!user.isOwn && !user.isFollow"
+            v-if="!status.isOwn && !status.isFollow"
             class="w-full bg-blue-700 text-white p-2 rounded-lg font-medium focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
+            @click="followUser"
           >
             关注TA
           </button>
           <button
-            v-if="!user.isOwn && user.isFollow"
+            v-if="!status.isOwn && status.isFollow"
             class="w-full bg-blue-700 text-white p-2 rounded-lg font-medium focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-blue-800 focus:outline-none"
+            @click="unfollowUser"
           >
             取消关注
           </button>
@@ -213,7 +215,7 @@ export default {
       }
     },
 
-    // 用户行为操作（一个函数包含6种操作）
+    // 用户行为操作
     async action(type, isType) {
       const data = { object: "Article", type };
       let res;
@@ -231,6 +233,21 @@ export default {
       if (res.code === 0) {
         // 重新获取文章详情和用户操作状态
         this.getArticle();
+        this.getStatus();
+      }
+    },
+
+    // 关注用户
+    async followUser() {
+      const res = await this.$axios.$put(`/user-follow/${this.user._id}`);
+      if (res.code === 0) {
+        this.getStatus();
+      }
+    },
+    // 取关用户
+    async unfollowUser() {
+      const res = await this.$axios.$delete(`/user-follow/${this.user._id}`);
+      if (res.code === 0) {
         this.getStatus();
       }
     },
