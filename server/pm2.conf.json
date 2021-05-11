@@ -1,0 +1,6 @@
+{
+    "apps": {
+        "name": "dlddw-server",
+        "script": "app.js"
+    }
+}

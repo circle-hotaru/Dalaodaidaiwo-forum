@@ -3,10 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./app.js",
-    "dev": "./node_modules/.bin/nodemon ./app.js",
-    "prd": "pm2 start bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env NODE_ENV=development nodemon app.js",
+    "prd": "cross-env NODE_ENV=production pm2 start pm2.conf.json"
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",

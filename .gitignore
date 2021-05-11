@@ -10,3 +10,6 @@
 
 # Nuxt generate
 /**/dist
+
+# upload images
+/**/upload/images

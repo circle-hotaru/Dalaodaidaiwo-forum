@@ -17,9 +17,6 @@ module.exports = {
 
 		const { username, password } = ctx.request.body
 
-		console.log('username', username);
-		console.log('password', password);
-
 		// 查询该管理员
 		let admin = await AdminModel.findOne({ username }).select('+password')
 		if (!admin) { return ctx.body = res(1, '管理员不存在') }
