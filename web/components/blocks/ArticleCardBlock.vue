@@ -14,7 +14,7 @@
           {{ article.user.username }}
         </h3>
         <p class="text-xs text-gray-500">
-          {{ article.createDate | formatTime }}
+          {{ article.createTime | formatTime }}
         </p>
       </div>
     </nuxt-link>

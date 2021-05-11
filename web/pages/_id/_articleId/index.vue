@@ -90,7 +90,7 @@
                     </button>
                   </div>
                   <p class="text-gray-500 text-sm">
-                    {{ article.createDate | formatTime }}・3 min read
+                    {{ article.createTime | formatTime }}・3 min read
                   </p>
                 </div>
                 <div class="mt-4" v-html="article.content_html"></div>
@@ -163,7 +163,7 @@ Add to the discussion</textarea
           </div>
           <div>
             <div class="font-medium text-gray-500">加入时间</div>
-            <div>{{ user.createDate | formatTime }}</div>
+            <div>{{ user.createTime | formatTime }}</div>
           </div>
         </div>
       </div>

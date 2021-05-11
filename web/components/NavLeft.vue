@@ -1,7 +1,7 @@
 <template>
   <ul class="space-y-1">
     <li
-      class="text-gray-900 hover:text-primary-500 hover:bg-gray-200 md:rounded py-1 lg:px-2 px-8"
+      class="text-gray-900 hover:text-primary-500 hover:bg-gray-200 md:rounded py-1 lg:px-2 px-4"
       v-for="(link, index) in links"
       :key="index"
     >

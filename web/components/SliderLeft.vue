@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hidden md:flex md:flex-auto md:flex-col md:items-start space-y-2 md:p-4 rounded-lg bg-white"
+    class="hidden md:flex md:flex-auto md:flex-col md:items-start space-y-2 md:p-4 rounded-lg"
   >
     <!-- <div class="md:border border-b md:rounded-md bg-white p-4 hidden md:block">
       <h2 class="text-lg font-bold">

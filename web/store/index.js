@@ -11,8 +11,8 @@ export const state = () => ({
     username: '',
     avatar: '',
     introduce: '',
-    createDate: '',
-    updateDate: ''
+    createTime: '',
+    updateTime: ''
   },
   currentArticle: null,
   routeInfo: {} // 当前激活的路由信息
@@ -50,8 +50,8 @@ export const mutations = {
       username: '',
       avatar: '',
       introduce: '',
-      createDate: '',
-      updateDate: ''
+      createTime: '',
+      updateTime: ''
     }
     localStorage.setItem('access_token', state.access_token)
   },

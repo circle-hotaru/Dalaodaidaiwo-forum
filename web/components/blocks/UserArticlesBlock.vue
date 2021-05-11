@@ -27,14 +27,7 @@ export default {
     return {
       page: 1, // 页数
       articles: [],
-      tagProportion: [{ value: 3, name: "VueJS" }],
-      testData: [
-        { value: 3, name: "VueJS" },
-        { value: 6, name: "HTML" },
-        { value: 10, name: "ReactJS" },
-        { value: 4, name: "CSS" },
-        { value: 8, name: "JavaScript" },
-      ],
+      tagProportion: [],
     };
   },
   async fetch() {
