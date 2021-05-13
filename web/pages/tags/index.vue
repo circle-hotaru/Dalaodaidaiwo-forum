@@ -52,7 +52,6 @@ export default {
   methods: {
     async getTags() {
       const res = await this.$axios.$get("/tag");
-      console.log(res);
       this.tags = res.data.tagList;
     },
 

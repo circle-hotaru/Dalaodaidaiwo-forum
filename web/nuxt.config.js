@@ -4,7 +4,7 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'web',
+    title: '大佬带带我',
     htmlAttrs: {
       lang: 'en'
     },
@@ -28,15 +28,13 @@ export default {
     '~/plugins/vue-observe-visibility.client.js',
     { src: '~/plugins/axios.js', ssr: false },
     { src: '~/plugins/vue-mavon-editor', ssr: false },
-    '~/plugins/font-awesome',
-    // '~/plugins/echarts',
+    '~/plugins/font-awesome'
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     '@nuxtjs/svg',
     '@nuxtjs/tailwindcss',
-    'nuxt-buefy',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

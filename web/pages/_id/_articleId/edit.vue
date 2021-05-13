@@ -46,18 +46,7 @@
       </div>
 
       <section>
-        <b-taginput
-          v-model="article.tags"
-          :data="filteredTags"
-          autocomplete
-          field="name"
-          icon="label"
-          maxtags="3"
-          placeholder="添加标签"
-          @typing="getFilteredTags"
-          class="z-40"
-        >
-        </b-taginput>
+        <tags-input ref="tagsInput" class="z-40"></tags-input>
       </section>
 
       <no-ssr>
@@ -76,9 +65,13 @@
 </template>
 
 <script>
+import TagsInput from "@/components/TagsInput";
+
 export default {
   layout: "edit",
-
+  components: {
+    TagsInput,
+  },
   data() {
     return {
       markdownOption: {
@@ -128,8 +121,6 @@ export default {
         content_md: "",
         content_html: "",
       },
-      tagList: [],
-      filteredTags: [],
       // 图片上传地址
       url: "/upload/images/article",
     };
@@ -143,7 +134,6 @@ export default {
     // 获取文章详情
     async getArticle() {
       const res = await this.$axios.$get(`/article/${this.articleId}`);
-      console.log(res);
       if (res.code === 0) {
         // 设置文章数据
         const { title, tags, content_md } = res.data.article;
@@ -152,29 +142,13 @@ export default {
         this.content = content_md;
       }
     },
-
-    // 获取标签列表
-    async getTagList() {
-      const res = await this.$axios.get("/tag");
-      if (res.data.code === 0) {
-        this.tagList = res.data.data.tagList;
-      }
-    },
-
-    // 自动过滤标签
-    getFilteredTags(text) {
-      this.filteredTags = this.tagList.filter((option) => {
-        return (
-          option.name.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0
-        );
-      });
-    },
     // 新增或更新文章
     async save() {
       const { title, content_md, content_html } = this.article;
-      let { tags } = this.article;
       const articleId = this.articleId;
+      let tags = this.$refs.tagsInput.tags;
       tags = tags.map((item) => item._id);
+
       // 不能为空 下次一定
       // if (!title || !tags.length || !content_md || !content_html) {
       //   return this.$message({ type: "error", message: "请将信息填写完整" });

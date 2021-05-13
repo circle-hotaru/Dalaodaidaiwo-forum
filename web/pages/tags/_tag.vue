@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     async getArticlesByTag() {
-      console.log(this.$route.params.tag);
       const res = await this.$axios.$get(
         `/articles/${this.$route.params.tag}`,
         {
@@ -82,7 +81,6 @@ export default {
           },
         }
       );
-      console.log(res);
       this.articles = this.articles.concat(res.data.articleList);
     },
 

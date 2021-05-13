@@ -46,18 +46,7 @@
       </div>
 
       <section>
-        <b-taginput
-          v-model="article.tags"
-          :data="filteredTags"
-          autocomplete
-          field="name"
-          icon="label"
-          maxtags="3"
-          placeholder="添加标签"
-          @typing="getFilteredTags"
-          class="z-40"
-        >
-        </b-taginput>
+        <tags-input ref="tagsInput" class="z-40"></tags-input>
       </section>
 
       <no-ssr>
@@ -76,9 +65,13 @@
 </template>
 
 <script>
+import TagsInput from "@/components/TagsInput";
+
 export default {
   layout: "edit",
-
+  components: {
+    TagsInput,
+  },
   data() {
     return {
       markdownOption: {
@@ -127,37 +120,15 @@ export default {
         content_md: "",
         content_html: "",
       },
-      tagList: [],
-      filteredTags: [],
       // 图片上传地址
       url: "/upload/images/article",
     };
   },
-  async fetch() {
-    await this.getTagList();
-    this.filteredTags = this.tagList;
-  },
   methods: {
-    // 获取标签列表
-    async getTagList() {
-      const res = await this.$axios.get("/tag");
-      if (res.data.code === 0) {
-        this.tagList = res.data.data.tagList;
-      }
-    },
-
-    // 自动过滤标签
-    getFilteredTags(text) {
-      this.filteredTags = this.tagList.filter((option) => {
-        return (
-          option.name.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0
-        );
-      });
-    },
     // 新增或更新文章
     async save() {
       const { title, content_md, content_html } = this.article;
-      let { tags } = this.article;
+      let tags = this.$refs.tagsInput.tags;
       tags = tags.map((item) => item._id);
       // 发送的数据对象
       const data = { title, tags, content_md, content_html };
