@@ -2,7 +2,7 @@ module.exports = {
     // 开发服务器配置
     devServer: {
         host: 'localhost',
-        port: 3003,
+        port: 3002,
         hot: true
     },
     lintOnSave: false,

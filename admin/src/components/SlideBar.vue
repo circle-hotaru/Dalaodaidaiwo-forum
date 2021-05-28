@@ -45,14 +45,14 @@
         <el-menu-item index="/user/list">用户列表</el-menu-item>
       </el-submenu>
 
-      <el-submenu index="5">
+      <!-- <el-submenu index="5">
         <template slot="title">
           <i class="el-icon-s-tools" />
           <span slot="title">系统设置</span>
         </template>
         <el-menu-item index="/system/admin-add">新增管理员</el-menu-item>
         <el-menu-item index="/system/admin-list">管理员列表</el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
 
       <el-menu-item class="github-link">
         <a

@@ -77,7 +77,7 @@ export default {
     this.getTagList();
   },
   methods: {
-    // 获取一级标签列表
+    // 获取标签列表
     async getTagList() {
       const { page, pageSize } = this;
       const res = await tag.tagList({ params: { page, pageSize } });
@@ -102,6 +102,7 @@ export default {
             if (this.page !== 1 && this.tagList.length === 1) {
               this.page = this.page - 1;
             }
+            this.getTagList();
           }
         })
         .catch(() => {});

@@ -35,6 +35,7 @@ export default {
   buildModules: [
     '@nuxtjs/svg',
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/style-resources'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -48,6 +49,10 @@ export default {
   axios: {
     baseURL: 'http://localhost:3009/api/web',
     timeout: 20000
+  },
+
+  styleResources: {
+    scss: ['~/assets/styles/tokens.scss']
   },
 
   fontawesome: {

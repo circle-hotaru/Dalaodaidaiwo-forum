@@ -45,7 +45,7 @@ export default {
 
     // 删除文章
     delArticle(row) {
-      this.$confirm(`确认要删除文章"${row.articlename}"?`, "提示", {
+      this.$confirm(`确认要删除文章"${row.title}"?`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",

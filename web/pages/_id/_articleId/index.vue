@@ -93,7 +93,7 @@
                     {{ article.createTime | formatTime }}・3 min read
                   </p>
                 </div>
-                <div class="mt-4" v-html="article.content_html"></div>
+                <div class="mt-4 content" v-html="article.content_html"></div>
               </div>
             </article>
           </div>
@@ -267,3 +267,65 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .content {
+  iframe {
+    max-width: 100%;
+  }
+  h1 {
+    font-size: $text-3xl;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: $-ls2;
+  }
+  h2 {
+    font-size: $text-2xl;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: $-ls2;
+  }
+  h3 {
+    font-size: $text-xl;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: $-ls2;
+  }
+  h4 {
+    font-size: $text-base;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: $-ls2;
+  }
+  a {
+    color: $primary-color;
+  }
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    code {
+      background-color: #d2f3e1;
+      border-radius: 0.25rem;
+      padding: 0.25rem;
+    }
+  }
+  img {
+    width: 100%;
+    border-radius: 0.5rem;
+  }
+  .highlight {
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+  }
+  ul {
+    list-style: numeral;
+    margin-bottom: 1rem;
+    li p {
+      margin-bottom: 0;
+    }
+  }
+  ol {
+    margin-bottom: 1rem;
+  }
+}
+</style>

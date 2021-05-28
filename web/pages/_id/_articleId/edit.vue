@@ -138,7 +138,7 @@ export default {
         // 设置文章数据
         const { title, tags, content_md } = res.data.article;
         this.article.title = title;
-        this.article.tags = tags;
+        this.$refs.tagsInput.tags = tags;
         this.content = content_md;
       }
     },
