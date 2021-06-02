@@ -18,7 +18,7 @@ module.exports = {
         ctx.body = res(0, '删除文章成功')
     },
 
-    // 获取用户增长
+    // 获取文章增长
     async articleGrowth(ctx, next) {
         const today = new Date()
         const day = today.setDate(today.getDate() - 7);
