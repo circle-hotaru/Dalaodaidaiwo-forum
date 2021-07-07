@@ -58,11 +58,44 @@
 
 1. 评论功能
 2. 国际化
+3. 部署
 
 欢迎提 Issue 和 Pull request。
+
+## 🌌参考
+
+- [DEV Community](https://dev.to/)
+- [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
+- [Node.js 从零开发 Web Server 博客项目](https://coding.imooc.com/class/320.html)
 
 ## 📜License
 
 基于 [MIT](./LICENSE) 许可进行开源。
 
+## 🖼截图
+
+![admin-dashboard][admin-dashboard-screenshot]
+
+![article-page][article-page-screenshot]
+
+![edit-page][edit-page-screenshot]
+
+![personal-home][personal-home-screenshot]
+
+![personal-setting][personal-settting-screenshot]
+
+![article-list][article-list-screenshot]
+
+![tag-list][tag-list-screenshot]
+
+
+
 [home-screenshot]: images/home.png
+[admin-dashboard-screenshot]: images/admin-dashboard.png
+[article-page-screenshot]: images/article-page.png
+[edit-page-screenshot]: images/edit-page.png
+[personal-home-screenshot]: images/personal-home.png
+[personal-settting-screenshot]: images/personal-setting.png
+[article-list-screenshot]: images/article-list.png
+[tag-list-screenshot]: images/tag-list.png
+
